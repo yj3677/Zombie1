@@ -28,10 +28,15 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Move()
     {
-
+        //상대적으로 이동할 거리 계산
+        Vector3 moveDistance = playerInput.move * transform.forward * moveSpeed * Time.deltaTime;
+        //리지드바디 이용해 게임 오브젝트 위치 변경
+        playerRigidBody.MovePosition(playerRigidBody.position + moveDistance);
     }
     private void Rotate()
     {
-
+        //상대적으로 회전할 수치 계산
+        float turn = playerInput.rotate * rotateSpeed * Time.deltaTime;
+        playerRigidBody.rotation = playerRigidBody.rotation * Quaternion.Euler(0, turn, 0);
     }
 }
