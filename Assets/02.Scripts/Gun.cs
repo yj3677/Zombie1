@@ -34,7 +34,12 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
-        
+        gunAudioPlayer = GetComponent<AudioSource>();
+        bulletLineRenderer = GetComponent<LineRenderer>();
+
+        //사용할 점을 두 개로 변경
+        bulletLineRenderer.positionCount = 2;
+        bulletLineRenderer.enabled = false;
     }
 
     void Start()
@@ -43,7 +48,14 @@ public class Gun : MonoBehaviour
     }
     private void OnEnable()
     {
-        
+        //전체 예비 탄알 양을 초기화
+        ammoRemain = gunData.startAmmoRemain;
+        //현재 탄창을 가득 채우기
+        magAmmo = gunData.magCapacity;
+        //총의 현재 상태를 총을 쏠 준비가 된 상태로 변경
+        state = State.Ready;
+        //마지막으로 총을 쏜 시점을 초기화
+        lastFireTime = 0;
     }
     public void Fire()
     {
@@ -55,6 +67,12 @@ public class Gun : MonoBehaviour
     }
     private IEnumerator ShotEffect(Vector3 hitPosition)
     {
+        muzzleFlashEffect.Play();  //총구 화염 효과 재생
+        shellEjectEffect.Play();   //탄피 배출 효과 재생
+        gunAudioPlayer.PlayOneShot(gunData.shotClip); //총격 소리 재생
+        bulletLineRenderer.SetPosition(0, fireTransform.position);  //선의 시작점은 총구의 위치
+        bulletLineRenderer.SetPosition(1, hitPosition); //선의 끝점은 입력으로 들어온 충돌 위치
+        
         bulletLineRenderer.enabled = true;
         yield return new WaitForSeconds(0.03f);
         bulletLineRenderer.enabled = false;
