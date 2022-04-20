@@ -9,6 +9,7 @@ public class LivingEntity : MonoBehaviour,IDamageable
     public float health { get; protected set; }//현재 체력
     public bool dead { get; protected set; }//사망 상태
     public event Action OnDeath; //사망 시 발동할 이벤트
+    private Enemy enemy;
 
     protected virtual void OnEnable()
     {
@@ -25,6 +26,7 @@ public class LivingEntity : MonoBehaviour,IDamageable
         if (health<=0 &&!dead)
         {
             Die();
+            enemy.enemyAnimator.SetBool("Attack", false);
         }
     }
     public virtual void RestoreHealth(float newHealth)
@@ -46,7 +48,7 @@ public class LivingEntity : MonoBehaviour,IDamageable
     }
     void Start()
     {
-        
+        enemy = FindObjectOfType<Enemy>();
     }
 
     // Update is called once per frame
