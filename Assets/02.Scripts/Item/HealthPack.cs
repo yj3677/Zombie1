@@ -9,5 +9,5 @@ public class HealthPack : MonoBehaviour,IItem
     {
         Debug.Log("체력을 회복했다 : " + health);
     }
-
+    
 }
